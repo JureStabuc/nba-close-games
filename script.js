@@ -386,35 +386,66 @@ svg_priv.append("text")
       d3.csv("form/" + value + ".csv", type, function(error, data) {
         data.sort(function(a, b) { return b[data.columns[1]] /  b.total - a[data.columns[1]] /  a.total; });
 
+        // x_form.domain([0, 1]).nice()
         y_form.domain(data.map(function(d) { return d.index; } ));
         z_form.domain(data.columns.slice(1));
-        svg_form.selectAll(".serie").remove();
 
-        var new_layer = svg_form.selectAll(".serie")
+        var layer = svg_form.selectAll(".serie")
           .data(stack_form.keys(data.columns.slice(1))(data))
-          .enter().append("g")
+
+        layer
+          .exit()
+          .remove()
+
+        var new_layer = layer.enter()
+          .append("g")
           .attr("class", "serie")
 
         new_layer.selectAll("rect")
-          .data(function(d) { return d; })
+          .data(function(d) { return d;})
           .enter().append("rect")
-          .attr("y", function(d) { return y_form(d.data.index); })
-          .transition()
-          .duration(1000)
-          .attr("x", function(d) { return x_form(d[0]); })
-          .attr("width", function(d) { return x_form(d[1]) - x_form(d[0]); })
-          .attr("height", y_form.bandwidth())
-          .attr("fill", function(d) { if (d[0] === 0) {return "green"} else {return "red"} ;});
+            .attr("y", function(d) { return y_form(d.data.index); })
+            .transition()
+            .duration(1000)
+            .attr("x", function(d) { return x_form(d[0]); })
+            .attr("width", function(d) { return x_form(d[1]) - x_form(d[0]); })
+            .attr("height", y_form.bandwidth())
+            .attr("fill", function(d) { if (d[0] === 0) {return "green"} else {return "red"} ;});
+
+        new_layer.merge(layer)
+            // .data(stack_form.keys(data.columns.slice(1))(data))
+            .selectAll("rect")
+            .data(function(d) { return d;})
+            .transition()
+            .duration(1000)
+            .attr("width", function(d) { return x_form(d[1]) - x_form(d[0]); })
+            .attr("y", function(d) { return y_form(d.data.index); })
+            .attr("x", function(d) { return x_form(d[0]); });
 
         new_layer.selectAll("text")
           .data(function(d) { return d; })
           .enter()
           .append("text")
           .text(function(d) { if (d[0] === 0) {return "Victories: "+ Math.round((d[1] - d[0])*100)+"%"} else {return "Defeats: "+ Math.round((d[1] - d[0])*100)+"%"} ;})
+          // return z_form(d.key) + Math.round((d[1] - d[0])*100)+"%"
           .style("color", "black")
           .style("font-size", "20px")
           .attr("x", function(d) { if (d[0] === 0) {return x_form(d[0])} else {return x_form(d[1])-120}; })
-          .attr("y", function(d) { return y_form(d.data.index)-10; });
+          .attr("y", function(d) { return y_form(d.data.index)-10; })
+
+        new_layer.merge(layer)
+          .selectAll("text")
+          .data(function(d) { return d; })
+          .text(function(d) { if (d[0] === 0) {return "Victories: "+ Math.round((d[1] - d[0])*100)+"%"} else {return "Defeats: "+ Math.round((d[1] - d[0])*100)+"%"} ;})
+          // return z_form(d.key) + Math.round((d[1] - d[0])*100)+"%"
+          // .style("color", "black")
+          // .attr("x", function(d) { if (d[0] === 0) {return x_form(d[0])} else {return x_form(d[1])-90}; })
+          // .attr("y", function(d) { return y_form(d.data.index)-10; })
+
+
+
+
+
 
         d3.select('.axis.axis--x')
             .call(x_axisForm.ticks(10, "%"));
@@ -480,22 +511,23 @@ svg_priv.append("text")
               });
         });
         d3.csv("advantage/" + value + ".csv", type, function(error, data) {
-          data.sort(function(a, b) { return b[data.columns[1]] /  b.total - a[data.columns[1]] /  a.total; });
-
+          // x_form.domain([0, 1]).nice()
           y_priv.domain(data.map(function(d) { return d.index; } ));
           z_priv.domain(data.columns.slice(1));
 
-          svg_priv.selectAll(".serie1").remove();
-
-          console.log(data);
-
-          var new_layer = svg_priv.selectAll(".serie1")
+          var layer = svg_priv.selectAll(".serie")
             .data(stack_priv.keys(data.columns.slice(1))(data))
-            .enter().append("g")
-            .attr("class", "serie1");
+
+          layer
+            .exit()
+            .remove()
+
+          var new_layer = layer.enter()
+            .append("g")
+            .attr("class", "serie")
 
           new_layer.selectAll("rect")
-            .data(function(d) { return d; })
+            .data(function(d) { return d;})
             .enter().append("rect")
               .attr("y", function(d) { return y_priv(d.data.index); })
               .transition()
@@ -504,6 +536,16 @@ svg_priv.append("text")
               .attr("width", function(d) { return x_priv(d[1]) - x_priv(d[0]); })
               .attr("height", y_priv.bandwidth())
               .attr("fill", function(d) { if (d[0] === 0) {return "green"} else {return "red"} ;});
+
+          new_layer.merge(layer)
+              // .data(stack_form.keys(data.columns.slice(1))(data))
+              .selectAll("rect")
+              .data(function(d) { return d;})
+              .transition()
+              .duration(1000)
+              .attr("width", function(d) { return x_priv(d[1]) - x_priv(d[0]); })
+              .attr("y", function(d) { return y_priv(d.data.index); })
+              .attr("x", function(d) { return x_priv(d[0]); });
 
           new_layer.selectAll("text")
             .data(function(d) { return d; })
@@ -514,6 +556,58 @@ svg_priv.append("text")
             .style("font-size", "20px")
             .attr("x", function(d) { if (d[0] === 0) {return x_priv(d[0])} else {return x_priv(d[1])-120}; })
             .attr("y", function(d) { return y_priv(d.data.index)-10; });
+
+          new_layer.merge(layer)
+            .selectAll("text")
+            .data(function(d) { return d; })
+            .text(function(d) { if (d[0] === 0) {return "In favour: "+ Math.round((d[1] - d[0])*100)+"%"} else {return "Against: "+ Math.round((d[1] - d[0])*100)+"%"} ;});
+
+            // .text(function(d) { if (d[0] === 0) {return "Victories: "+ Math.round((d[1] - d[0])*100)+"%"} else {return "Defeats: "+ Math.round((d[1] - d[0])*100)+"%"} ;})
+            // return z_form(d.key) + Math.round((d[1] - d[0])*100)+"%"
+            // .style("color", "black")
+            // .attr("x", function(d) { if (d[0] === 0) {return x_form(d[0])} else {return x_form(d[1])-90}; })
+            // .attr("y", function(d) { return y_form(d.data.index)-10; })
+
+
+
+
+
+
+
+          // data.sort(function(a, b) { return b[data.columns[1]] /  b.total - a[data.columns[1]] /  a.total; });
+          //
+          // y_priv.domain(data.map(function(d) { return d.index; } ));
+          // z_priv.domain(data.columns.slice(1));
+          //
+          // svg_priv.selectAll(".serie1").remove();
+          //
+          // console.log(data);
+          //
+          // var new_layer = svg_priv.selectAll(".serie1")
+          //   .data(stack_priv.keys(data.columns.slice(1))(data))
+          //   .enter().append("g")
+          //   .attr("class", "serie1");
+          //
+          // new_layer.selectAll("rect")
+          //   .data(function(d) { return d; })
+          //   .enter().append("rect")
+          //     .attr("y", function(d) { return y_priv(d.data.index); })
+          //     .transition()
+          //     .duration(1000)
+          //     .attr("x", function(d) { return x_priv(d[0]); })
+          //     .attr("width", function(d) { return x_priv(d[1]) - x_priv(d[0]); })
+          //     .attr("height", y_priv.bandwidth())
+          //     .attr("fill", function(d) { if (d[0] === 0) {return "green"} else {return "red"} ;});
+          //
+          // new_layer.selectAll("text")
+          //   .data(function(d) { return d; })
+          //   .enter()
+          //   .append("text")
+          //   .text(function(d) { if (d[0] === 0) {return "In favour: "+ Math.round((d[1] - d[0])*100)+"%"} else {return "Against: "+ Math.round((d[1] - d[0])*100)+"%"} ;})
+          //   .style("color", "black")
+          //   .style("font-size", "20px")
+          //   .attr("x", function(d) { if (d[0] === 0) {return x_priv(d[0])} else {return x_priv(d[1])-120}; })
+          //   .attr("y", function(d) { return y_priv(d.data.index)-10; });
 
 
 
