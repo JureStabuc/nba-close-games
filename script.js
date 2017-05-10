@@ -29,10 +29,10 @@ var height = document.getElementById('vis')
 
 // define margins
 var margin = {
-    top: 50,
-    bottom: 100,
-    left: 300,
-    right: 300
+  top: 50,
+  bottom: 35,
+  left: 50,
+  right: 50
 };
 
 // draw the svg that holds the visualisation
@@ -102,11 +102,9 @@ svg.append('g')
 
 // drawing the chart title
 svg.append("text")
+    .attr("class", "title")
     .attr("x", (width / 2))
     .attr("y", 0 - (margin.top / 2))
-    .attr("text-anchor", "middle")
-    .style("font-size", "30px")
-    .style("margin-bottom", "20px")
     .text("When incorrect calls are made");
 
 // -------------------------------------------------------
@@ -124,9 +122,9 @@ var height_form = document.getElementById("stacked")
 // define margins
 var margin_form = {
     top: 50,
-    bottom: 50,
-    left: 300,
-    right: 300
+    bottom: 35,
+    left: 50,
+    right: 50
 }
 
 // draw the svg that holds the visualisation
@@ -169,16 +167,14 @@ var y_axisForm = d3.axisLeft()
 
 // drawing the chart title
 svg_form.append("text")
+    .attr("class", "title")
     .attr("x", (width_form / 2))
     .attr("y", 0 - (margin_form.top / 2))
-    .attr("text-anchor", "middle")
-    .style("font-size", "30px")
-    .style("margin-bottom", "20px")
     .text("Overall performance");
 
 // drawing the axis
 svg_form.append("g")
-    .attr("class", "axis axis--x")
+    .attr("class", "axis--x")
     .attr("transform", "translate(0," + height_form + ")");
 // -------------------------------------------------------
 
@@ -195,9 +191,9 @@ var height_priv = document.getElementById("privileged")
 // define margins
 var margin_priv = {
     top: 50,
-    bottom: 50,
-    left: 300,
-    right: 300
+    bottom: 35,
+    left: 50,
+    right: 50
 }
 
 // draw the svg that holds the visualisation
@@ -241,15 +237,10 @@ svg_priv.append("g")
 
 // drawing the chart title
 svg_priv.append("text")
+    .attr("class", "title")
     .attr("x", (width_priv / 2))
     .attr("y", 0 - (margin_form.top / 2))
-    .attr("text-anchor", "middle")
-    .style("font-size", "30px")
-    .style("margin-bottom", "20px")
     .text("Overall incorrect calls");
-
-
-
 // -------------------------------------------------
 
 // Drawing the charts based on the team value
@@ -337,28 +328,38 @@ function draw(value) {
             .duration(1000)
             .call(y_axis);
 
+            var dataL = 0;
+            var offset = 80;
         // drawing the legend for the lines
         var legend = svg.selectAll(".legend")
             // using only relevant columns
             .data(csv_data.columns.slice(2).reverse())
             .enter().append("g")
             .attr("class", "legend")
-            .attr("transform", function(d, i) {
-                return "translate(0," + i * 20 + ")";
-            })
-            .style("font", "10px sans-serif");
+            .attr("transform", function (d, i) {
+                         if (i === 0) {
+                            dataL = d.length + offset
+                            return "translate(0,0)"
+                        } else {
+                         var newdataL = dataL
+                         dataL +=  d.length + offset
+                         return "translate(" + (newdataL) + ",0)"
+                        }
+            });
+            // .style("font", "10px sans-serif");
 
         // drawing legend's colour boxes
         legend.append("rect")
-            .attr("x", width)
-            .attr("width", 18)
-            .attr("height", 18)
+            .attr("x", 0)
+            .attr("y", height + 25)
+            .attr("width", 10)
+            .attr("height", 10)
             .attr("fill", z);
 
         // appending text to legend boxes
         legend.append("text")
-            .attr("x", width + 20)
-            .attr("y", 9)
+            .attr("x", 20)
+            .attr("y", height + 30)
             .attr("dy", ".35em")
             .attr("text-anchor", "start")
             .text(function(d) {
@@ -396,8 +397,6 @@ function draw(value) {
             tooltip
                 .style('display', 'none');
         };
-
-
     });
 
     d3.csv("form/" + value + ".csv", type, function(error, data) {
@@ -483,18 +482,18 @@ function draw(value) {
                     return "Defeats: " + Math.round((d[1] - d[0]) * 100) + "%"
                 };
             })
-            .style("color", "black")
-            .style("font-size", "20px")
+            // .style("color", "black")
+            // .style("font-size", "20px")
             .attr("x", function(d) {
                 if (d[0] === 0) {
                     return x_form(d[0])
                 } else {
-                    return x_form(d[1]) - 120
+                    return x_form(d[1]) - 85
                 };
             })
             .attr("y", function(d) {
                 return y_form(d.data.index) - 10;
-            })
+            });
 
         // update text
         new_layer.merge(layer)
@@ -510,7 +509,7 @@ function draw(value) {
                 };
             })
         // drawing the axis
-        d3.select('.axis.axis--x')
+        d3.select('.axis--x')
             .call(x_axisForm.ticks(10, "%"));
     });
 
@@ -648,13 +647,11 @@ function draw(value) {
                     return "Against: " + Math.round((d[1] - d[0]) * 100) + "%"
                 };
             })
-            .style("color", "black")
-            .style("font-size", "20px")
             .attr("x", function(d) {
                 if (d[0] === 0) {
                     return x_priv(d[0])
                 } else {
-                    return x_priv(d[1]) - 120
+                    return x_priv(d[1]) - 85
                 };
             })
             .attr("y", function(d) {
@@ -694,9 +691,7 @@ function draw(value) {
 
         new_parasLeft.merge(parasLeft)
             .text(function(d, i) {
-                console.log(d);
                 adv_percHome = Math.round((d.advantage / d.total) * 100);
-                console.log(d);
                 return "Home in favour: " + adv_percHome + "%";
             });
 
@@ -714,9 +709,7 @@ function draw(value) {
 
         new_parasRight.merge(parasRight)
             .text(function(d, i) {
-                // console.log(d);
                 dis_percHome = Math.round((d.disadvantage / d.total) * 100);
-                console.log(d);
                 return "Home against: " + dis_percHome + "%";
             });
     });
@@ -728,7 +721,6 @@ function draw(value) {
             .data(data)
             .text(function(d, i) {
                 adv_percAway = Math.round((d.advantage / d.total) * 100);
-                console.log(d);
                 return "Away in favour: " + adv_percAway + "%";
             });
 
@@ -737,7 +729,6 @@ function draw(value) {
             .data(data)
             .text(function(d, i) {
                 dis_percAway = Math.round((d.disadvantage / d.total) * 100);
-                console.log(d);
                 return "Away against: " + dis_percAway + "%";
             });
     });

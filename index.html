@@ -5,11 +5,14 @@
     <title>NBA close games</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <p class= "first">NBA is now reviewing officiated events that occurred in the last two minutes of games which were within five points at the two minute mark. The data includes all calls (whistles) and notable non-calls. With an analysis we can find out which team is calmer and performs better in close games.</p>
+  <div class = "first">
+  <p>NBA publishes reviews of officiated events that occurred in the last 120 seconds of games which were within five points at the two minute mark. The data includes all calls (whistles) and notable non-calls. We can find out which team has the steadiest hand and calmest nerves.</p>
+  </div>
     <div id="input">
-      <label>Select a team
+      <label>Select team
         <select id="myteam">
         </select>
       </label>
@@ -18,15 +21,16 @@
     <div id = "stacked"></div>
     <div id = "text-left"></div>
     <div id = "text-right"></div>
-    <p class="nekaj">More than often fans complain when their team is not performing as expected about referees and how they are helping the opponent. But  although some teams perform better in close games it does not necessarily mean that they had some help from the referees in the last seconds. </p>
-    <p class = "konc">Here we can see the team statistic for incorrect calls, how many were in favour and against and how these calls are distributed in the last 120 seconds of the game. </p>
+    <div class = "second">
+      <p>More than often fans complain when their team is not performing as expected. Mostly it is about referees and how they help the opponent. But although some teams perform better in close games it does not necessarily mean that they had some help from the officials in the last seconds.</p>
+    </div>
+    <div class = "third">
+      <p>The chart visualises the team statistic for incorrect calls, how many were in favour and against. The timeline show when and how many of them occur in the last 120 seconds of the game in 5 seconds intervals.</p>
+    </div>
     <div id="privileged"></div>
     <div id = "privileged-left"></div>
     <div id = "privileged-right"></div>
     <div id="vis"></div>
-
-
-
     <script src="script.js"></script>
 </body>
 </html>
