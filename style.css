@@ -143,13 +143,13 @@ select#myteam {
 
 .line {
     fill: none;
-    stroke: green;
+    stroke: #e9a3c9;
     stroke-width: 4px;
 }
 
 .lineo {
     fill: none;
-    stroke: red;
+    stroke: #a1d76a;
     stroke-width: 2px;
 }
 
