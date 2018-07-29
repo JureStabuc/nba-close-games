@@ -261,12 +261,12 @@ select#myteam {
     /*---------------------MULTILINE CHART---------------------*/
     .line {
         fill: none;
-        stroke: green;
+        stroke: #a1d76a;
         stroke-width: 6px;
     }
     .lineo {
         fill: none;
-        stroke: red;
+        stroke: #e9a3c9;
         stroke-width: 3px;
     }
     #vis {
@@ -373,12 +373,12 @@ select#myteam {
     /*---------------------MULTILINE CHART---------------------*/
     .line {
         fill: none;
-        stroke: green;
+        stroke: #a1d76a;
         stroke-width: 6px;
     }
     .lineo {
         fill: none;
-        stroke: red;
+        stroke: #e9a3c9;
         stroke-width: 3px;
     }
     #vis {
