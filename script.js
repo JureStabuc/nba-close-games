@@ -91,7 +91,7 @@ var y_axis = d3.axisLeft()
     .scale(y_scale);
 
 var z = d3.scaleOrdinal(d3.schemeCategory20)
-    .range(["red", "green"]);
+    .range(["#e9a3c9", "#a1d76a"]);
 
 svg.append('g')
     .attr('class', 'x axis')
@@ -149,7 +149,7 @@ var x_form = d3.scaleLinear()
     .rangeRound([0, width_form]);
 
 var z_form = d3.scaleOrdinal(d3.schemeCategory20)
-    .range(["green", "red"]);
+    .range(["#a1d76a", "#e9a3c9"]);
 
 var labels_form = d3.scaleOrdinal(d3.schemeCategory20)
     .range(["victories", "defeats"]);
@@ -217,7 +217,7 @@ var x_priv = d3.scaleLinear()
     .rangeRound([0, width_priv]);
 
 var z_priv = d3.scaleOrdinal(d3.schemeCategory20)
-    .range(["green", "red"]);
+    .range(["#a1d76a", "#e9a3c9"]);
 
 // defining stack for stacked chart
 var stack_priv = d3.stack()
@@ -276,7 +276,7 @@ function draw(value) {
             .append('path')
             .attr('class', 'line')
             .attr('fill', 'none')
-            .attr('stroke', 'green')
+            .attr('stroke', '#a1d76a')
             .merge(lines)
             .transition()
             .duration(1000)
@@ -287,7 +287,7 @@ function draw(value) {
             .append('path')
             .attr('class', 'lineo')
             .attr('fill', 'none')
-            .attr('stroke', 'red')
+            .attr('stroke', '#e9a3c9')
             .merge(linesO)
             .transition()
             .duration(1000)
@@ -445,9 +445,9 @@ function draw(value) {
             .attr("height", y_form.bandwidth())
             .attr("fill", function(d) {
                 if (d[0] === 0) {
-                    return "green"
+                    return "#a1d76a"
                 } else {
-                    return "red"
+                    return "#e9a3c9"
                 };
             });
 
@@ -611,9 +611,9 @@ function draw(value) {
             .attr("height", y_priv.bandwidth())
             .attr("fill", function(d) {
                 if (d[0] === 0) {
-                    return "green"
+                    return "#a1d76a"
                 } else {
-                    return "red"
+                    return "#e9a3c9"
                 };
             });
         // update
